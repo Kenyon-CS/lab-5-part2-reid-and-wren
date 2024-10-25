@@ -206,12 +206,14 @@ public:
                  // 
     nodeType<Type> *first; //pointer to the first node of the list
     nodeType<Type> *last;  //pointer to the last node of the list
-
-private: 
-    void copyList(const linkedListType<Type>& otherList); 
+    
+ void copyList(const linkedListType<Type>& otherList); 
       //Function to make a copy of otherList.
       //Postcondition: A copy of otherList is created and assigned
       //    to this list.
+
+private: 
+   
 }; 
 
 template <class Type>

@@ -47,6 +47,11 @@ public:
       //    of the new list, and count is decremented by 1. If
       //    deleteItem is not in the list, an appropriate message
       //    is printed.
+    void mergeLists(orderedLinkedList<Type> &list1,orderedLinkedList<Type> &list2);
+    //This function creates a new list by merging the
+    //elements of list1 and list2.
+    //Postcondition: first points to the merged list; list1
+    // and list2 are empty
 };
 
 template <class Type>
@@ -68,7 +73,6 @@ bool orderedLinkedList<Type>::search(const Type& searchItem) const
 
     return found;
 }//end search
-
 
 template <class Type>
 void orderedLinkedList<Type>::insert(const Type& newItem)
@@ -95,7 +99,7 @@ void orderedLinkedList<Type>::insert(const Type& newItem)
         current = first;
         found = false;
 
-        while (current != NULL && !found) //search the list
+        while (current != NULL && !found){ //search the list
            if (current->info >= newItem)
                found = true;
            else
@@ -103,7 +107,7 @@ void orderedLinkedList<Type>::insert(const Type& newItem)
                trailCurrent = current;
                current = current->link;
            }
-
+        }
         if (current == first)      //Case 2: the new item is smallest
         {
             newNode->link = first;
@@ -149,7 +153,7 @@ void orderedLinkedList<Type>::deleteNode(const Type& deleteItem)
         current = first;
         found = false;
 
-        while (current != NULL && !found)  //search the list
+        while (current != NULL && !found){  //search the list
             if (current->info >= deleteItem)
                 found = true;
             else
@@ -157,11 +161,12 @@ void orderedLinkedList<Type>::deleteNode(const Type& deleteItem)
                 trailCurrent = current;
                 current = current->link;
             }
-
-        if (current == NULL)   //Case 4
+        }
+        if (current == NULL){  //Case 4
             cout << "The item to be deleted is not in the "
                  << "list." << endl;
-        else
+        }
+        else{
             if (current->info == deleteItem) //the item to be
                                    //deleted is in the list
             {
@@ -178,18 +183,57 @@ void orderedLinkedList<Type>::deleteNode(const Type& deleteItem)
                 {
                     trailCurrent->link = current->link;
 
-                    if (current == last)
+                    if (current == last){
                         last = trailCurrent;
-
+                    }
                     delete current;
                 }
                 count--;
             }
-            else                            //Case 4
+            else{                           //Case 4
                 cout << "The item to be deleted is not in the "
                      << "list." << endl;
+            }
+        }
     }
 }//end deleteNode
+
+template<class Type>
+void orderedLinkedList<Type>::mergeLists(orderedLinkedList<Type> &list1,orderedLinkedList<Type> &list2){
+    nodeType<Type> *point1 = list1.first;
+    nodeType<Type> *point2 = list2.first;
+
+    orderedLinkedList<Type> temp;
+    temp.copyList(list1);
+
+    while(point2!=NULL){
+        temp.insert(point2->info);
+        point2 = point2 -> link;
+    }
+
+    list1.destroyList();
+    list2.destroyList();
+    
+    nodeType<Type> *newNode;
+    nodeType<Type> *tempCurrent;
+    tempCurrent = temp.first;
+    count = temp.count;
+    
+    first = new nodeType<Type>;
+
+    first->info = tempCurrent->info;
+    first->link = NULL;
+    last = first;
+    tempCurrent = tempCurrent->link;
+    while(tempCurrent != NULL){
+        newNode = new nodeType<Type>;
+        newNode->info = tempCurrent->info;
+        newNode->link = NULL;
+        last->link = newNode;
+        last = newNode;
+        tempCurrent = tempCurrent->link;
+    }
+}
 
 
 #endif
